@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Feud Component Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .generator-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .answers-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .answers-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .answers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .answer-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-answer-btn, .remove-answer-btn {
+            background: #00d2ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-answer-btn:hover {
+            background: #0099cc;
+            transform: translateY(-1px);
+        }
+
+        .remove-answer-btn {
+            background: #ff6b6b;
+        }
+
+        .remove-answer-btn:hover {
+            background: #ff4757;
+            transform: translateY(-1px);
+        }
+
+        .remove-answer-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .answer-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .answer-input-group h4 {
+            grid-column: 1 / -1;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(58, 123, 213, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(58, 123, 213, 0.4);
+        }
+
+        .output-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section h3 {
+            color: #00d2ff;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .code-output {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #f8f8f2;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            background: #00d2ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #0099cc;
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            background: #00d4aa;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: none;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .answer-input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .answers-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .answer-controls {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="generator-container">
+        <div class="header">
+            <h1>🎮 Family Feud Generator</h1>
+            <p>Create your custom Family Feud game component</p>
+        </div>
+
+        <div class="form-container">
+            <form id="familyFeudForm">
+                <div class="form-group">
+                    <label for="question">Game Question:</label>
+                    <input type="text" id="question" name="question" placeholder="Name something you might find in a kitchen" required>
+                </div>
+
+                <div class="answers-section">
+                    <div class="answers-header">
+                        <h3>📝 Answers & Hints</h3>
+                        <div class="answer-controls">
+                            <button type="button" class="add-answer-btn" id="addAnswerBtn">➕ Add Answer</button>
+                            <button type="button" class="remove-answer-btn" id="removeAnswerBtn">➖ Remove Answer</button>
+                        </div>
+                    </div>
+                    <div id="answersContainer">
+                        <div class="answer-input-group" data-answer-number="1">
+                            <h4>Answer 1</h4>
+                            <input type="text" name="answer1" placeholder="Answer" required>
+                            <input type="text" name="hint1" placeholder="Hint">
+                        </div>
+                        <div class="answer-input-group" data-answer-number="2">
+                            <h4>Answer 2</h4>
+                            <input type="text" name="answer2" placeholder="Answer" required>
+                            <input type="text" name="hint2" placeholder="Hint">
+                        </div>
+                        <div class="answer-input-group" data-answer-number="3">
+                            <h4>Answer 3</h4>
+                            <input type="text" name="answer3" placeholder="Answer" required>
+                            <input type="text" name="hint3" placeholder="Hint">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="generate-btn">✨ Generate Family Feud Code</button>
+            </form>
+
+            <div class="output-section" id="outputSection">
+                <h3>🎯 Your Generated Code:</h3>
+                <div class="code-output" id="codeOutput"></div>
+                <button class="copy-btn" id="copyBtn">📋 Copy to Clipboard</button>
+                <div class="success-message" id="successMessage">✅ Code copied to clipboard!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let answerCount = 3;
+        const maxAnswers = 10;
+        const minAnswers = 1;
+
+        function updateAnswerButtons() {
+            const addBtn = document.getElementById('addAnswerBtn');
+            const removeBtn = document.getElementById('removeAnswerBtn');
+            
+            addBtn.disabled = answerCount >= maxAnswers;
+            removeBtn.disabled = answerCount <= minAnswers;
+        }
+
+        function addAnswer() {
+            if (answerCount >= maxAnswers) return;
+            
+            answerCount++;
+            const container = document.getElementById('answersContainer');
+            
+            const answerGroup = document.createElement('div');
+            answerGroup.className = 'answer-input-group';
+            answerGroup.setAttribute('data-answer-number', answerCount);
+            
+            answerGroup.innerHTML = `
+                <h4>Answer ${answerCount}</h4>
+                <input type="text" name="answer${answerCount}" placeholder="Answer" required>
+                <input type="text" name="hint${answerCount}" placeholder="Hint">
+            `;
+            
+            container.appendChild(answerGroup);
+            updateAnswerButtons();
+            
+            // Smooth scroll to new answer
+            answerGroup.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function removeAnswer() {
+            if (answerCount <= minAnswers) return;
+            
+            const container = document.getElementById('answersContainer');
+            const lastAnswer = container.querySelector(`[data-answer-number="${answerCount}"]`);
+            
+            if (lastAnswer) {
+                lastAnswer.remove();
+                answerCount--;
+                updateAnswerButtons();
+            }
+        }
+
+        document.getElementById('addAnswerBtn').addEventListener('click', addAnswer);
+        document.getElementById('removeAnswerBtn').addEventListener('click', removeAnswer);
+
+        document.getElementById('familyFeudForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const question = formData.get('question');
+            
+            let answersHTML = '';
+            
+            for (let i = 1; i <= answerCount; i++) {
+                const answer = formData.get(`answer${i}`);
+                const hint = formData.get(`hint${i}`);
+                
+                if (answer) {
+                    answersHTML += `            <div class="answer-slot hidden" data-answer="${answer}" data-hint="${hint || 'No hint provided'}">
+                <div class="answer-text">${answer}</div>
+            </div>\n`;
+                }
+            }
+            
+            const generatedCode = `<div class="container family-feud-container">
+        <div class="game-title">FAMILY FEUD</div>
+
+        <div class="question-display" id="questionDisplay">
+            ${question}
+        </div>
+        
+        <div class="answer-board" id="answerBoard">
+${answersHTML}        </div>
+        
+        <div class="controls-row" id="controlsRow"></div>
+        <div class="hint-display" id="hintDisplay"></div>
+        <div class="player-input" id="playerInput"></div>
+        <div class="red-x-overlay" id="redXOverlay"></div>
+        
+        <link href="https://apus-ssimon.github.io/family-feud/style.css" rel="stylesheet">
+        <script src="https://apus-ssimon.github.io/family-feud/script.js"><\/script>
+    </div>`;
+            
+            document.getElementById('codeOutput').textContent = generatedCode;
+            document.getElementById('outputSection').style.display = 'block';
+            
+            // Smooth scroll to output
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const codeOutput = document.getElementById('codeOutput');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeOutput.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        });
+
+        // Add some sample data for demonstration
+        window.addEventListener('load', function() {
+            document.getElementById('question').value = 'Name something you might find in a kitchen';
+            document.querySelector('input[name="answer1"]').value = 'Refrigerator';
+            document.querySelector('input[name="hint1"]').value = 'Keeps food cold';
+            document.querySelector('input[name="answer2"]').value = 'Stove';
+            document.querySelector('input[name="hint2"]').value = 'Used for cooking';
+            document.querySelector('input[name="answer3"]').value = 'Microwave';
+            document.querySelector('input[name="hint3"]').value = 'Heats food quickly';
+            
+            updateAnswerButtons();
+        });
+    </script>
+</body>
+</html>
