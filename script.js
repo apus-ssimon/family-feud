@@ -1,5 +1,4 @@
-
-        // Game state
+// Game state
         const gameState = {
             currentScore: 0,
             revealedAnswers: new Set(),
@@ -65,6 +64,15 @@
             strikeXs: null,     // Will be created dynamically
             scoreDisplay: null  // Will be created dynamically
         };
+
+        // Answer matching function
+        function isAnswerMatch(playerAnswer, correctAnswer) {
+            const player = playerAnswer.toLowerCase().trim();
+            const correct = correctAnswer.toLowerCase().trim();
+            
+            // Exact match only
+            return player === correct;
+        }
 
         // Utility functions
         function showRedX() {
@@ -143,15 +151,15 @@
         function submitAnswer() {
             if (!audio.context) audio.init();
             
-            const answer = elements.input.value.trim().toLowerCase();
+            const answer = elements.input.value.trim();
             if (!answer) return;
             
             let foundMatch = false;
             
             elements.answerSlots.forEach((slot, index) => {
                 if (!gameState.revealedAnswers.has(index)) {
-                    const correctAnswer = slot.dataset.answer.toLowerCase();
-                    if (correctAnswer.includes(answer) || answer.includes(correctAnswer)) {
+                    const correctAnswer = slot.dataset.answer;
+                    if (isAnswerMatch(answer, correctAnswer)) {
                         foundMatch = true;
                         revealAnswer(index);
                     }
