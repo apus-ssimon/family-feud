@@ -19,7 +19,7 @@
         }
 
         .generator-container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -56,14 +56,14 @@
         .form-group label {
             display: block;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.2em;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .form-group input[type="text"] {
             width: 100%;
-            padding: 12px 16px;
+            padding: 15px 20px;
             border: 2px solid #e1e8ed;
             border-radius: 10px;
             font-size: 16px;
@@ -137,21 +137,53 @@
         }
 
         .answer-input-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 20px;
+            margin-bottom: 25px;
+            padding: 25px;
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .answer-input-group h4 {
-            grid-column: 1 / -1;
             color: #667eea;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field label {
+            font-size: 1em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .input-field input {
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .generate-btn {
@@ -176,16 +208,29 @@
 
         .output-section {
             margin-top: 40px;
-            padding: 30px;
-            background: #1a1a1a;
-            border-radius: 15px;
             display: none;
         }
 
-        .output-section h3 {
+        .code-block {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #1a1a1a;
+            border-radius: 15px;
+        }
+
+        .code-block h3 {
             color: #00d2ff;
-            margin-bottom: 20px;
-            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .code-block .instruction {
+            color: #ffeb3b;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 235, 59, 0.1);
+            border-radius: 8px;
+            font-style: italic;
         }
 
         .code-output {
@@ -197,9 +242,10 @@
             font-size: 14px;
             color: #f8f8f2;
             white-space: pre-wrap;
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
             line-height: 1.5;
+            margin-bottom: 15px;
         }
 
         .copy-btn {
@@ -209,7 +255,6 @@
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
-            margin-top: 15px;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -222,15 +267,21 @@
         .success-message {
             background: #00d4aa;
             color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
+            padding: 8px 16px;
+            border-radius: 20px;
             display: none;
-            margin-top: 10px;
-            text-align: center;
+            margin-left: 15px;
+            font-size: 0.9em;
+        }
+
+        .copy-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         @media (max-width: 768px) {
-            .answer-input-group {
+            .input-row {
                 grid-template-columns: 1fr;
             }
             
@@ -243,6 +294,12 @@
             .answer-controls {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .copy-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
@@ -272,18 +329,42 @@
                     <div id="answersContainer">
                         <div class="answer-input-group" data-answer-number="1">
                             <h4>Answer 1</h4>
-                            <input type="text" name="answer1" placeholder="Answer" required>
-                            <input type="text" name="hint1" placeholder="Hint">
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label>Answer:</label>
+                                    <input type="text" name="answer1" placeholder="Enter the answer" required>
+                                </div>
+                                <div class="input-field">
+                                    <label>Hint:</label>
+                                    <input type="text" name="hint1" placeholder="Enter a helpful hint">
+                                </div>
+                            </div>
                         </div>
                         <div class="answer-input-group" data-answer-number="2">
                             <h4>Answer 2</h4>
-                            <input type="text" name="answer2" placeholder="Answer" required>
-                            <input type="text" name="hint2" placeholder="Hint">
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label>Answer:</label>
+                                    <input type="text" name="answer2" placeholder="Enter the answer" required>
+                                </div>
+                                <div class="input-field">
+                                    <label>Hint:</label>
+                                    <input type="text" name="hint2" placeholder="Enter a helpful hint">
+                                </div>
+                            </div>
                         </div>
                         <div class="answer-input-group" data-answer-number="3">
                             <h4>Answer 3</h4>
-                            <input type="text" name="answer3" placeholder="Answer" required>
-                            <input type="text" name="hint3" placeholder="Hint">
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label>Answer:</label>
+                                    <input type="text" name="answer3" placeholder="Enter the answer" required>
+                                </div>
+                                <div class="input-field">
+                                    <label>Hint:</label>
+                                    <input type="text" name="hint3" placeholder="Enter a helpful hint">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -292,10 +373,35 @@
             </form>
 
             <div class="output-section" id="outputSection">
-                <h3>🎯 Your Generated Code:</h3>
-                <div class="code-output" id="codeOutput"></div>
-                <button class="copy-btn" id="copyBtn">📋 Copy to Clipboard</button>
-                <div class="success-message" id="successMessage">✅ Code copied to clipboard!</div>
+                <div class="code-block">
+                    <h3>📋 CSS Link (Add to &lt;head&gt; section - only once per page)</h3>
+                    <div class="instruction">Copy this CSS link and paste it in the &lt;head&gt; section of your page. You only need this once, even if you have multiple Family Feud games on the same page.</div>
+                    <div class="code-output" id="cssOutput">&lt;link href="https://apus-ssimon.github.io/family-feud/style.css" rel="stylesheet"&gt;</div>
+                    <div class="copy-section">
+                        <button class="copy-btn" onclick="copyToClipboard('cssOutput', 'cssSuccess')">📋 Copy CSS Link</button>
+                        <div class="success-message" id="cssSuccess">✅ CSS link copied!</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <h3>🔧 JavaScript Link (Add before &lt;/body&gt; - only once per page)</h3>
+                    <div class="instruction">Copy this script link and paste it before the closing &lt;/body&gt; tag. You only need this once, even if you have multiple Family Feud games on the same page.</div>
+                    <div class="code-output" id="jsOutput">&lt;p&gt;&lt;script src="https://apus-ssimon.github.io/family-feud/script.js"&gt;&lt;/script&gt;&lt;/p&gt;</div>
+                    <div class="copy-section">
+                        <button class="copy-btn" onclick="copyToClipboard('jsOutput', 'jsSuccess')">📋 Copy Script Link</button>
+                        <div class="success-message" id="jsSuccess">✅ Script link copied!</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <h3>🎯 Game Component HTML</h3>
+                    <div class="instruction">Copy this HTML component code and paste it wherever you want the Family Feud game to appear. You can copy this multiple times for multiple games on the same page.</div>
+                    <div class="code-output" id="componentOutput"></div>
+                    <div class="copy-section">
+                        <button class="copy-btn" onclick="copyToClipboard('componentOutput', 'componentSuccess')">📋 Copy Game Component</button>
+                        <div class="success-message" id="componentSuccess">✅ Component copied!</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -325,8 +431,16 @@
             
             answerGroup.innerHTML = `
                 <h4>Answer ${answerCount}</h4>
-                <input type="text" name="answer${answerCount}" placeholder="Answer" required>
-                <input type="text" name="hint${answerCount}" placeholder="Hint">
+                <div class="input-row">
+                    <div class="input-field">
+                        <label>Answer:</label>
+                        <input type="text" name="answer${answerCount}" placeholder="Enter the answer" required>
+                    </div>
+                    <div class="input-field">
+                        <label>Hint:</label>
+                        <input type="text" name="hint${answerCount}" placeholder="Enter a helpful hint">
+                    </div>
+                </div>
             `;
             
             container.appendChild(answerGroup);
@@ -347,6 +461,23 @@
                 answerCount--;
                 updateAnswerButtons();
             }
+        }
+
+        function copyToClipboard(elementId, successId) {
+            const element = document.getElementById(elementId);
+            const textArea = document.createElement('textarea');
+            textArea.value = element.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const successMessage = document.getElementById(successId);
+            successMessage.style.display = 'inline-block';
+            
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
         }
 
         document.getElementById('addAnswerBtn').addEventListener('click', addAnswer);
@@ -385,33 +516,13 @@ ${answersHTML}        </div>
         <div class="hint-display" id="hintDisplay"></div>
         <div class="player-input" id="playerInput"></div>
         <div class="red-x-overlay" id="redXOverlay"></div>
-        
-        <link href="https://apus-ssimon.github.io/family-feud/style.css" rel="stylesheet">
-        <script src="https://apus-ssimon.github.io/family-feud/script.js"><\/script>
     </div>`;
             
-            document.getElementById('codeOutput').textContent = generatedCode;
+            document.getElementById('componentOutput').textContent = generatedCode;
             document.getElementById('outputSection').style.display = 'block';
             
             // Smooth scroll to output
             document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        document.getElementById('copyBtn').addEventListener('click', function() {
-            const codeOutput = document.getElementById('codeOutput');
-            const textArea = document.createElement('textarea');
-            textArea.value = codeOutput.textContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 3000);
         });
 
         // Add some sample data for demonstration
