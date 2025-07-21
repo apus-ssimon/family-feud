@@ -40,7 +40,7 @@ body {
 
 .family-feud-container {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 5px auto;
     padding: 20px;
     background: linear-gradient(135deg, var(--sky-blue-light) 0%, var(--sky-blue) 100%);
     border-radius: var(--border-radius);
